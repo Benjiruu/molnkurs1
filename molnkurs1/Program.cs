@@ -9,6 +9,10 @@ builder.Services.AddDbContext<ListingDbContext>(options =>
 
 // Add services to the container.
 
+builder.Services.AddHostedService<MessageService>();
+builder.Services.AddSingleton(x =>
+            x.GetServices<IHostedService>().OfType<MessageService>().First()
+        );
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
