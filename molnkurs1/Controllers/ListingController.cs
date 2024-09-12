@@ -23,6 +23,7 @@ namespace ListingService.Controllers
             {
                 return BadRequest(ModelState);
             }
+            listing.Id = 0;
 
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
