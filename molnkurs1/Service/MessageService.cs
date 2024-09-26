@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 public class MessageService : IHostedService
 {
 
@@ -30,10 +31,47 @@ public class MessageService : IHostedService
         channel.BasicPublish("create-listing", string.Empty, null, message);
     }
 
+    private void ListenForProfileCreations()
+    {
+       
+        channel.ExchangeDeclare(exchange: "create-user", type: ExchangeType.Fanout);
+
+       
+        var queueName = channel.QueueDeclare("user-queue", true, false, false).QueueName;
+        channel.QueueBind(queue: queueName, exchange: "create-user", routingKey: string.Empty);
+
+        
+        var consumer = new EventingBasicConsumer(channel);
+        consumer.Received += (model, ea) =>
+        {
+            var body = ea.Body.ToArray();
+            var json = Encoding.UTF8.GetString(body);
+
+            try
+            {
+                
+                var user = JsonSerializer.Deserialize<UserCreationMessage>(json);
+                Console.WriteLine("Received userId: " + user.UserId);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error processing message: " + e.ToString());
+            }
+        };
+
+  
+        channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+    }
+
+
     // Anropas när programmet startas
     public Task StartAsync(CancellationToken cancellationToken)
     {
         Connect();
+
+        ListenForProfileCreations();
+
         return Task.CompletedTask;
     }
 
@@ -45,4 +83,10 @@ public class MessageService : IHostedService
         connection.Close();
         return Task.CompletedTask;
     }
+
+    public class UserCreationMessage
+    {
+        public string UserId { get; set; }
+    }
+
 }
