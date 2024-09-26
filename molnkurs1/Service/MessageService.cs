@@ -75,6 +75,13 @@ public class MessageService : IHostedService
         return Task.CompletedTask;
     }
 
+    //Logging
+    public void SendLoggingActions(string action)
+    {
+        var message = Encoding.UTF8.GetBytes(action);
+        channel.BasicPublish("logging", string.Empty, null, message);
+    }
+
     // Anropas när programmet stoppas, och då kopplar vi bort från
     // RabbitMQ
     public Task StopAsync(CancellationToken cancellationToken)
