@@ -41,6 +41,7 @@ namespace ListingService.Controllers
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
             messageService.NotifyListingCreation(listing1); 
+            messageService.SendLoggingActions("Ad: " + listing.Title + " created by userID:" + listing.UserId);
             return CreatedAtAction("PostListing", new { id = listing.Id }, listing);
         }
     }
@@ -48,11 +49,10 @@ namespace ListingService.Controllers
 
 public class ListingDto
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public decimal Price { get; set; }
-    public string UserId { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required int Id { get; set; }
+    public required string Title { get; set; }
+    public required string Description { get; set; }
+    public required decimal Price { get; set; }
+    public required string UserId { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }
-
