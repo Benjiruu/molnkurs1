@@ -44,6 +44,26 @@ namespace ListingService.Controllers
             messageService.SendLoggingActions("Ad: " + listing.Title + " created by userID:" + listing.UserId);
             return CreatedAtAction("PostListing", new { id = listing.Id }, listing);
         }
+
+        // DELETE: api/listing/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteListing(int id)
+        {
+            var listing = await _context.Listings.FindAsync(id);
+            if (listing == null)
+            {
+                return NotFound(new { message = "Listing not found." });
+            }
+
+            _context.Listings.Remove(listing);
+            await _context.SaveChangesAsync();
+
+            
+            messageService.NotifyListingUpdate(id.ToString());
+            messageService.SendLoggingActions("Ad: " + listing.Title + " deleted by userID:" + listing.UserId);
+
+            return Ok(new { message = $"Listing {id} deleted successfully." });
+        }
     }
 }
 
