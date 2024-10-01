@@ -20,6 +20,8 @@ public class MessageService : IHostedService
         // Skapa en exchange för att kunna skicka meddelanden
         // till andra microservices
         channel.ExchangeDeclare("create-listing", ExchangeType.Fanout);
+
+        channel.ExchangeDeclare("update-listing", ExchangeType.Fanout);
     }
 
     // Skicka ett meddelande till andra microservices
@@ -29,6 +31,17 @@ public class MessageService : IHostedService
         var message = Encoding.UTF8.GetBytes(json);
 
         channel.BasicPublish("create-listing", string.Empty, null, message);
+    }
+
+    public void NotifyListingUpdate(string listingId)
+    {
+        var updateMessage = new { ListingId = listingId }; // Assuming we only need the listingId
+        var json = JsonSerializer.Serialize(updateMessage);
+        var message = Encoding.UTF8.GetBytes(json);
+
+        // Publish to the "update-listing" exchange
+        channel.BasicPublish("update-listing", string.Empty, null, message);
+        Console.WriteLine($"Updated listing with ID: {listingId} sent to search service.");
     }
 
     private void ListenForProfileCreations()
