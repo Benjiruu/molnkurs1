@@ -40,7 +40,7 @@ public class MessageService : IHostedService
         var message = Encoding.UTF8.GetBytes(json);
 
         // Skickar meddelande 
-        channel.BasicPublish("update-listing", string.Empty, null, message);
+        channel.BasicPublish("updated-listing", string.Empty, null, message);
         Console.WriteLine($"Updated listing with ID: {listingId} sent to search service.");
     }
 
