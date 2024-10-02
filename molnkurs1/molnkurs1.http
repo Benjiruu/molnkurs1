@@ -1,6 +1,6 @@
 @molnkurs1_HostAddress = http://localhost:5225
 
-GET {{molnkurs1_HostAddress}}/weatherforecast/
+GET {{molnkurs1_HostAddress}}
 Accept: application/json
 
 ###
