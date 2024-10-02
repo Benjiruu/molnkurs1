@@ -35,11 +35,11 @@ public class MessageService : IHostedService
 
     public void NotifyListingUpdate(string listingId)
     {
-        var updateMessage = new { ListingId = listingId }; // Assuming we only need the listingId
+        var updateMessage = new { ListingId = listingId };
         var json = JsonSerializer.Serialize(updateMessage);
         var message = Encoding.UTF8.GetBytes(json);
 
-        // Publish to the "update-listing" exchange
+        // Skickar meddelande 
         channel.BasicPublish("update-listing", string.Empty, null, message);
         Console.WriteLine($"Updated listing with ID: {listingId} sent to search service.");
     }
