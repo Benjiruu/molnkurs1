@@ -20,7 +20,7 @@ public class MessageService : IHostedService
         // Skapa en exchange för att kunna skicka meddelanden
         // till andra microservices
         channel.ExchangeDeclare("create-listing", ExchangeType.Fanout);
-
+        channel.ExchangeDeclare("logging", ExchangeType.Fanout);
         channel.ExchangeDeclare("update-listing", ExchangeType.Fanout);
     }
 
