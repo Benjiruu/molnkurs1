@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\microservice-listing.props" />
+</Project>

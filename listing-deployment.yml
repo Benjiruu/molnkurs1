@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: listing-microservice
+  labels:
+    app: listing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: listing
+  template:
+    metadata:
+      labels:
+        app: listing
+    spec:
+      containers:
+        - name: listing-database
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          ports:
+            - containerPort: 4000
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: "Password123!"  # Change this to a strong password
+            - name: MSSQL_TCP_PORT
+              value: "4000"
+        - name: listing
+          image: docker.io/library/listing-microservice:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080

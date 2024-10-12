@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "j5w8Apteuc7cIcgLOoFsoVFl5ZOhUJSmIf737+wVjoU=",
+  "Source": "microservice-listing",
+  "BasePath": "_content/microservice-listing",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
